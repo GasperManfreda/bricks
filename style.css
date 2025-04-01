@@ -1,0 +1,12 @@
+canvas { 
+    background: black; display: block; margin: auto; 
+}
+@font-face {
+    font-family: "font";
+    src: url("font/DigitalArcade.ttf") ;
+}
+h1 {
+    font-family: "font", sans-serif;
+    text-align: center;
+    font-size: 60px;
+}
