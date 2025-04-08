@@ -5,7 +5,7 @@ var x = canvas.width / 2;
 var y = canvas.height - 30;
 var dx = 1.5;
 var dy = -1.5;
-var ballRadius = 10;
+var ballRadius = 20;
 var paddleHeight = 10;
 var paddleWidth = 75;
 var paddleX = (canvas.width - paddleWidth) / 2;
@@ -20,20 +20,23 @@ var brickOffsetTop = 30;
 var brickOffsetLeft = 30;
 var score = 0;
 var bricks = [];
+var gameOver = false;
+
 const img1 = new Image();
-img1.src = 'img/slika3.jpg';
+img1.src = 'img/slika1.png';
 
 const img2 = new Image();
-img2.src = 'img/slika3_1.jpg';
+img2.src = 'img/slika2.png';
 
 const img3 = new Image();
-img3.src = 'img/slika3_2.jpg';
+img3.src = 'img/slika3.png';
 
 const paddle = new Image();
-paddle.src = 'paddle.jpg';
+paddle.src = 'img/paddle.jpg';
 
 const ball = new Image();
-ball.src = 'img/.jpg';
+ball.src = 'img/ball.png';
+
 
 
 
@@ -66,19 +69,11 @@ function keyUpHandler(e) {
 }
 
 function drawBall() {
-    ctx.beginPath();
-    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-    ctx.fillStyle = "#0095DD";
-    ctx.fill();
-    ctx.closePath();
+    ctx.drawImage(ball, x, y, ballRadius, ballRadius);
 }
 
 function drawPaddle() {
-    ctx.beginPath();
-    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
-    ctx.fillStyle = "#0095DD";
-    ctx.fill();
-    ctx.closePath();
+    ctx.drawImage(paddle, paddleX, canvas.height - paddleHeight -5, paddleWidth, paddleHeight);
 }
 
 function drawBricks() {
@@ -86,11 +81,14 @@ function drawBricks() {
         for (var r = 0; r < brickRowCount; r++) {
 
             if (bricks[c][r].status !=0) {
-
                 var brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
                 var brickY = r * (brickHeight) + brickOffsetTop;
                 bricks[c][r].x = brickX;
                 bricks[c][r].y = brickY;
+
+
+                
+                
                 switch(bricks[c][r].status){
                     case 1:ctx.drawImage(img3,brickX, brickY, brickWidth, brickHeight);break;
                     case 2:ctx.drawImage(img2,brickX, brickY, brickWidth, brickHeight);break;
@@ -106,12 +104,21 @@ function collisionDetection() {
         for (var r = 0; r < brickRowCount; r++) {
             var b = bricks[c][r];
             if (b.status !=0) {
-                if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight + ballRadius) {
+                if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight ) {
                     dy = -dy;
                     b.status -= 1;
                     score++;
-                    if (score === brickRowCount * brickColumnCount) {
-                        document.location.reload();
+                    if (score === brickRowCount * brickColumnCount*3) {
+                        Swal.fire({
+                            title: 'You Win!',
+                            text: 'Congratulations, you broke all the bricks!',
+                            icon: 'success',
+                            confirmButtonText: 'Play Again',
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.location.reload(); 
+                            }
+                        });
                     }
                 }
             }
@@ -128,7 +135,7 @@ function draw() {
     drawPaddle();
     collisionDetection();
     
-    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+    if (x + dx > canvas.width - ballRadius || x + dx < 0) {
         dx = -dx;
     }
     if (y + dy < ballRadius) {
@@ -139,6 +146,17 @@ function draw() {
         } else if(y > canvas.height - ballRadius){
             dx = 0;
             dy = 0;
+            gameOver = true;
+            Swal.fire({
+                title: 'Game Over!',
+                text: 'Click restart to try again',
+                icon: 'error',
+                confirmButtonText: 'Restart',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.location.reload(); 
+                }
+            });
         }
     }
     
@@ -150,7 +168,9 @@ function draw() {
     
     x += dx;
     y += dy;
-    requestAnimationFrame(draw);
+    if (!gameOver) {
+        requestAnimationFrame(draw);
+    }
 }
 
 draw();
