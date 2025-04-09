@@ -1,5 +1,6 @@
 canvas { 
     background: black; display: block; margin: auto; 
+    border: 1px solid white;
 }
 @font-face {
     font-family: "font";
@@ -9,4 +10,8 @@ h1 {
     font-family: "font", sans-serif;
     text-align: center;
     font-size: 60px;
+    color: white;
+}
+body{
+    background-image: url(img/background.png);
 }
