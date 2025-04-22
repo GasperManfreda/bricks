@@ -1,17 +1,41 @@
 canvas { 
-    background: black; display: block; margin: auto; 
+    background: black; 
+    display: block; 
+    margin: auto; 
     border: 1px solid white;
 }
 @font-face {
     font-family: "font";
-    src: url("font/DigitalArcade.ttf") ;
+    src: url("font/Pixeled.ttf") ;
 }
 h1 {
     font-family: "font", sans-serif;
     text-align: center;
-    font-size: 60px;
+    font-size: 40px;
     color: white;
 }
 body{
     background-image: url(img/background.png);
+}
+#start_button, #stop_button,#credits{
+    font-family: "font", sans-serif;
+    height: 40px;
+    width: 70px;
+    font-size: 10px;
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+    border-radius: 10px;
+    cursor: pointer;
+}
+#start_button:hover, #stop_button:hover, #credits:hover{
+    background-color: white;
+    color: black;
+}
+#start_button{
+    margin-top: 2%;
+    margin-left: 44%;
+}
+.sw_font{
+    font-family: Arial, Helvetica, sans-serif;
 }

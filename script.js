@@ -21,6 +21,7 @@ var brickOffsetLeft = 30;
 var score = 0;
 var bricks = [];
 var gameOver = false;
+var isGameRunning = false;
 
 const img1 = new Image();
 img1.src = 'img/slika1.png';
@@ -39,8 +40,30 @@ ball.src = 'img/ball.png';
 
 
 
+document.getElementById("credits").addEventListener("click", function () {
+    Swal.fire({
+        title: "Avtor: Gašper Manfreda",
+        html:" Razred: 4.RA <br> ERŠ Nova Gorica",
+        icon: "info",
+        customClass:{
+            confirmButton: 'ok_button',
+            popup: 'sw_font'
+            
+        }
+      });
+});
 
+document.getElementById("start_button").addEventListener("click", function () {
+    if (!isGameRunning) {
+        isGameRunning = true;
+        draw();
+    }
+});
 
+document.getElementById("stop_button").addEventListener("click", function () {
+    isGameRunning = false;
+    
+});
 
 for (var c = 0; c < brickColumnCount; c++) {
     bricks[c] = [];
@@ -133,6 +156,7 @@ function draw() {
     drawBricks();
     drawBall();
     drawPaddle();
+    if(isGameRunning){
     collisionDetection();
     
     if (x + dx > canvas.width - ballRadius || x + dx < 0) {
@@ -168,9 +192,11 @@ function draw() {
     
     x += dx;
     y += dy;
+}
     if (!gameOver) {
         requestAnimationFrame(draw);
     }
+
 }
 
 draw();
